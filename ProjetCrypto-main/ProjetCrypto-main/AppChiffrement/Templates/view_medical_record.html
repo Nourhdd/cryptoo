@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Dossier Médical de {{ patient.profile.user.username }}</h2>
+
+{% if medical_record %}
+    <p><strong>Allergies:</strong> {{ medical_record.allergies }}</p>
+    <p><strong>Maladies Chroniques:</strong> {{ medical_record.chronic_diseases }}</p>
+    <p><strong>Médicaments en Cours:</strong> {{ medical_record.medications }}</p>
+    <p><strong>Chirurgies Antérieures:</strong> {{ medical_record.previous_surgeries }}</p>
+    <p><strong>Groupe Sanguin:</strong> {{ medical_record.blood_type }}</p>
+    <p><strong>Contact d'Urgence:</strong> {{ medical_record.emergency_contact }}</p>
+    <p><strong>Notes:</strong> {{ medical_record.notes }}</p>
+    <p><strong>Fichier Médical:</strong> <a href="{{ medical_record.file.url }}" target="_blank">Télécharger</a></p>
+{% else %}
+    <p>Aucun dossier médical disponible pour ce patient.</p>
+{% endif %}
+{% endblock %}

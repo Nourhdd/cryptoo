@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>Bienvenue sur votre espace patient</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Prendre un rendez-vous</h3>
+            <a href="{% url 'create_appointment' %}" class="btn btn-primary">
+                Nouveau rendez-vous
+            </a>
+            
+            <h4 class="mt-4">Médecins disponibles</h4>
+            <ul class="list-group">
+                {% for doctor in doctors %}
+                <li class="list-group-item">
+                    {{ doctor.profile.user.username }} - {{ doctor.specialty }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="col-md-6">
+            <h3>Vos rendez-vous</h3>
+            {% if appointments %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Médecin</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.doctor.profile.user.username }}</td>
+                        <td>{{ appointment.get_status_display }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>Vous n'avez aucun rendez-vous programmé.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

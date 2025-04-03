@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Mon Dossier Médical</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_file">Fichier Médical:</label>
+            {{ form.file }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_allergies">Allergies:</label>
+            {{ form.allergies }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_chronic_diseases">Maladies Chroniques:</label>
+            {{ form.chronic_diseases }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_medications">Médicaments Actuels:</label>
+            {{ form.medications }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_previous_surgeries">Chirurgies Antérieures:</label>
+            {{ form.previous_surgeries }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_blood_type">Groupe Sanguin:</label>
+            {{ form.blood_type }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_emergency_contact">Contact d'Urgence:</label>
+            {{ form.emergency_contact }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_notes">Notes Médicales:</label>
+            {{ form.notes }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    </form>
+
+    {% if medical_record.file %}
+    <p><strong>Fichier actuel :</strong> <a href="{{ medical_record.file.url }}" target="_blank">Télécharger</a></p>
+    {% endif %}
+</div>
+{% endblock %}

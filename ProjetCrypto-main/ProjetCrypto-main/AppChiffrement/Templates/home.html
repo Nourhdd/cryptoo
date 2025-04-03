@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Bienvenue sur Medical App</h1>
+    
+    {% if user.is_authenticated %}
+        <p>Bonjour {{ user.username }} ({{ user.get_role_display }})!</p>
+    {% else %}
+        <p>Connectez-vous pour accéder à votre espace.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary">Se connecter</a>
+    {% endif %}
+</div>
+{% endblock %}

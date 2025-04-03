@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Choix d'inscription{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">S'inscrire en tant que</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Patient</h5>
+                                <p class="card-text">Créez un compte patient pour prendre des rendez-vous.</p>
+                                <a href="{% url 'register_patient' %}" class="btn btn-primary">S'inscrire comme Patient</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Médecin</h5>
+                                <p class="card-text">Créez un compte médecin si vous possédez un numéro de licence.</p>
+                                <a href="{% url 'register_doctor' %}" class="btn btn-primary">S'inscrire comme Médecin</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="{% url 'login' %}">Déjà un compte? Connectez-vous</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

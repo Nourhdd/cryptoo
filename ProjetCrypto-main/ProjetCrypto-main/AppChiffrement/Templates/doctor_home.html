@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Bienvenue, Dr. {{ user.username }}</h2>
+        <a href="{% url 'logout' %}" class="btn btn-outline-danger">Déconnexion</a>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        
+        <a href="{% url 'profile' %}" class="btn btn-outline-danger">profile</a>
+    </div>
+
+    {% if appointments %}
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Vos rendez-vous</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Patient</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Statut</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {% if appointment.patient.profile.profile_picture %}
+                                    <img src="{{ appointment.patient.profile.profile_picture.url }}" 
+                                         class="rounded-circle me-3" 
+                                         width="40" 
+                                         height="40" 
+                                         alt="Photo patient">
+                                    {% else %}
+                                    <div class="rounded-circle bg-secondary me-3 d-flex align-items-center justify-content-center" 
+                                         style="width: 40px; height: 40px;">
+                                        <i class="fas fa-user text-white"></i>
+                                    </div>
+                                    {% endif %}
+                                    <div>
+                                        <strong>{{ appointment.patient.profile.user.username }}</strong><br>
+                                        <small class="text-muted">{{ appointment.patient.profile.user.email }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {{ appointment.date|date:"d/m/Y" }}<br>
+                                <small class="text-muted">{{ appointment.date|time:"H:i" }}</small>
+                            </td>
+                            <td>
+                                <span class="badge 
+                                    {% if appointment.status == 'confirmed' %}bg-success
+                                    {% elif appointment.status == 'pending' %}bg-warning text-dark
+                                    {% elif appointment.status == 'cancelled' %}bg-danger
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ appointment.get_status_display }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if appointment.status == "pending" %}
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{% url 'update_appointment_status' appointment.id 'accept' %}" 
+                                       class="btn btn-success" 
+                                       title="Accepter">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                    <a href="{% url 'update_appointment_status' appointment.id 'reject' %}" 
+                                       class="btn btn-danger" 
+                                       title="Refuser">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                </div>
+                                {% elif appointment.status == "confirmed" %}
+                                <a href="{% url 'view_medical_record' appointment.patient.profile.user.username %}" 
+                                   class="btn btn-primary btn-sm" 
+                                   title="Dossier médical">
+                                    <i class="fas fa-folder-open"></i> Dossier
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        Aucun rendez-vous programmé pour le moment.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.05);
+    }
+    .card {
+        border-radius: 10px;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+</style>
+{% endblock %}

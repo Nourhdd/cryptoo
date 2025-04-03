@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3>Mon Profil</h3>
+        </div>
+        
+        <div class="card-body">
+            <!-- Formulaire de mise à jour du profil -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <!-- Photo de profil avec option d'upload -->
+                    <div class="col-md-4 text-center">
+                        <div class="mb-3 position-relative">
+                            {% if profile.profile_picture %}
+                                <img src="{{ profile.profile_picture.url }}" 
+                                     class="rounded-circle img-thumbnail" 
+                                     width="200" 
+                                     alt="Photo de profil"
+                                     id="profile-picture">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center mx-auto" 
+                                     style="width: 200px; height: 200px;"
+                                     id="profile-picture">
+                                    <i class="fas fa-user text-white" style="font-size: 5rem;"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="mt-3">
+                                <input type="file" 
+                                       name="profile_picture" 
+                                       id="id_profile_picture" 
+                                       accept="image/*" 
+                                       style="display: none;"
+                                       onchange="previewImage(this)">
+                                <label for="id_profile_picture" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-camera"></i> Changer
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations du profil -->
+                    <div class="col-md-8">
+                        <h4>{{ profile.user.username }}</h4>
+                        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                        <p><strong>Téléphone:</strong> <input type="text" class="form-control" name="phone_number" value="{{ form.phone_number.value|default:profile.phone_number }}" /></p>
+                        <p><strong>Adresse:</strong>
+                            <textarea class="form-control" name="address">{{ form.address.value|default:profile.address }}</textarea>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        const imgElement = document.getElementById('profile-picture');
+        
+        reader.onload = function(e) {
+            // Si c'est une div (pas de photo existante)
+            if (imgElement.tagName === 'DIV') {
+                // Crée une image à la place
+                const newImg = document.createElement('img');
+                newImg.src = e.target.result;
+                newImg.className = 'rounded-circle img-thumbnail';
+                newImg.style.width = '200px';
+                newImg.alt = 'Photo de profil';
+                imgElement.parentNode.replaceChild(newImg, imgElement);
+                newImg.id = 'profile-picture';
+            } 
+            // Si c'est déjà une image
+            else {
+                imgElement.src = e.target.result;
+            }
+        };
+        
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+
+{% endblock %}
